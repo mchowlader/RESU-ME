@@ -13,25 +13,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      - name: Debug Runner Info
+        run: |
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner version: $RUNNER_VERSION"
 
-    - name: Setup .NET 9 SDK (Preview)
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '9.0.100-preview'
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Restore Dependencies
-      run: dotnet restore ./UI/UI.csproj
+      - name: Setup .NET 9 SDK (Preview)
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.100-preview'
 
-    - name: Build UI Project
-      run: dotnet build ./UI/UI.csproj --configuration Release --no-restore
+      - name: Restore Dependencies
+        run: dotnet restore ./UI/UI.csproj
 
-    - name: Publish UI Project
-      run: dotnet publish ./UI/UI.csproj --configuration Release --output ./publish
+      - name: Build UI Project
+        run: dotnet build ./UI/UI.csproj --configuration Release --no-restore
 
-    - name: Upload Published Files
-      uses: actions/upload-artifact@v3
-      with:
-        name: blazor-app
-        path: ./publish
+      - name: Publish UI Project
+        run: dotnet publish ./UI/UI.csproj --configuration Release --output ./publish
+
+      - name: Upload Published Files
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: blazor-app
+          path: ./publish
