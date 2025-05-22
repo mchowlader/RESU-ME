@@ -19,7 +19,7 @@ jobs:
     - name: Setup .NET 9 SDK (Preview)
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '9.0.100-preview'  # adjust based on the actual installed preview version
+        dotnet-version: '9.0.100-preview' 
 
     - name: Restore Dependencies
       run: dotnet restore ./UI/UI.csproj
