@@ -1,0 +1,33 @@
+name: .NET Core Blazor Server CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.x'  # adjust if you target a different version
+
+    - name: Restore dependencies
+      run: dotnet restore ./UI
+
+    - name: Build UI project
+      run: dotnet build ./UI --configuration Release --no-restore
+
+    - name: Publish UI project
+      run: dotnet publish ./UI -c Release -o ./publish
+
+    # optionally, deploy steps here...
