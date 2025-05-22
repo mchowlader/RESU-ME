@@ -1,4 +1,4 @@
-name: .NET Core Blazor Server CI/CD
+name: .NET 9 Blazor Server CI/CD
 
 on:
   push:
@@ -9,25 +9,29 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
+    - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Setup .NET SDK
+    - name: Setup .NET 9 SDK (Preview)
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '7.x'  # adjust if you target a different version
+        dotnet-version: '9.0.100-preview'  # adjust based on the actual installed preview version
 
-    - name: Restore dependencies
-      run: dotnet restore ./UI
+    - name: Restore Dependencies
+      run: dotnet restore ./UI/UI.csproj
 
-    - name: Build UI project
-      run: dotnet build ./UI --configuration Release --no-restore
+    - name: Build UI Project
+      run: dotnet build ./UI/UI.csproj --configuration Release --no-restore
 
-    - name: Publish UI project
-      run: dotnet publish ./UI -c Release -o ./publish
+    - name: Publish UI Project
+      run: dotnet publish ./UI/UI.csproj --configuration Release --output ./publish
 
-    # optionally, deploy steps here...
+    - name: Upload Published Files
+      uses: actions/upload-artifact@v3
+      with:
+        name: blazor-app
+        path: ./publish
