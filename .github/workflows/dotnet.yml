@@ -2,35 +2,33 @@ name: .NET 9 Blazor Server CI/CD
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
+    - name: Checkout Code
       uses: actions/checkout@v3
 
     - name: Setup .NET 9 SDK (Preview)
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '9.0.100-preview' 
+        dotnet-version: '9.0.100-preview'
 
     - name: Restore Dependencies
       run: dotnet restore ./UI/UI.csproj
 
-    - name: Build UI Project
+    - name: Build Project
       run: dotnet build ./UI/UI.csproj --configuration Release --no-restore
 
-    - name: Publish UI Project
+    - name: Publish Project
       run: dotnet publish ./UI/UI.csproj --configuration Release --output ./publish
 
-    - name: Upload Published Files
+    - name: Upload Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: blazor-app
